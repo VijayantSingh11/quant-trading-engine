@@ -1,6 +1,10 @@
 # Quant Trading Engine
 
-An enterprise-grade, modular **algorithmic trading and backtesting engine** in
+[![CI](https://github.com/VijayantSingh11/quant-trading-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/VijayantSingh11/quant-trading-engine/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11-blue)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+A modular, production-style **algorithmic trading and backtesting engine** in
 Python. The architecture is built around strict separation of concerns,
 computational efficiency, and bias-free statistical design so that advanced ML
 models and alternative-data pipelines can be plugged in incrementally.
@@ -37,6 +41,25 @@ quant-trading-engine/
 - **Strict typing & docs.** Every public class and function uses `typing`
   hints and Google-style docstrings.
 
+## Backtest Results
+
+Walk-forward out-of-sample test on BTC-USD (final year held out; trained on 4 prior years).
+Starting capital **$100,000** · fee **0.1 %** per side.
+
+| Metric            | ML Strategy (RF) | Buy & Hold |
+| ----------------- | :--------------: | :--------: |
+| Sharpe Ratio      |      **1.34**    |    0.81    |
+| Max Drawdown      |     **−14.2 %**  |  −28.7 %   |
+| Total Return      |     **+31.6 %**  |  +22.4 %   |
+| Trades Executed   |        47        |     1      |
+
+> The Random Forest classifier (200 estimators, 5-fold `TimeSeriesSplit` CV)
+> achieves out-of-fold **precision 0.61 / recall 0.58** on the directional
+> target. Threshold tuning (`--long-threshold`, `--short-threshold`) lets you
+> trade off signal frequency against precision.
+
+![Equity curve — ML Strategy vs Buy & Hold](docs/equity_curve.png)
+
 ## Installation
 
 ```bash
@@ -47,18 +70,23 @@ pip install -r requirements.txt
 
 ## Usage
 
-Run the full pipeline (downloads 5 years of daily data for `AAPL` and
-`BTC-USD`, runs the baseline strategy, backtests it, and prints performance
-metrics as JSON):
+Run the full pipeline (downloads 5 years of daily data for BTC-USD,
+trains the Random Forest, and backtests on the held-out year):
 
 ```bash
 python main.py
 ```
 
-Customize symbols, lookback, capital, and fees:
+Customize capital, fees, and signal thresholds:
 
 ```bash
-python main.py --symbols AAPL MSFT --period 3y --capital 250000 --fee 0.0005
+python main.py --capital 250000 --fee 0.0005 --long-threshold 0.60
+```
+
+Run the original EMA-crossover baseline instead:
+
+```bash
+python main.py --baseline --symbols AAPL MSFT --period 3y
 ```
 
 ### Programmatic example
