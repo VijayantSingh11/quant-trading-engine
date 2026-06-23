@@ -1,5 +1,13 @@
 # Quant Trading Engine
 
+## 🌐 Live Dashboard
+
+**[→ View Live Demo](https://vijayantsingh11.github.io/quant-trading-engine/)**
+_Interactive results dashboard — no install required._
+
+---
+
+
 [![CI](https://github.com/VijayantSingh11/quant-trading-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/VijayantSingh11/quant-trading-engine/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
